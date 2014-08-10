@@ -1,0 +1,14 @@
+{% extends "_layouts/cp" %}
+
+{# {% set title = craft.simpleform.getName() %} #}
+
+{% set selectedTab = "forms" %}
+
+{% set content %}
+	<h1>SimpleForm</h1>
+{% endset %}
+
+{% block sidebar %}
+	<a href="{{ url('simpleform/forms/new') }}" class="btn submit">Add a new form</a>
+	{{ parent() }}
+{% endblock %}

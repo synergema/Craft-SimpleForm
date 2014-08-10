@@ -1,0 +1,65 @@
+{% extends "_layouts/cp" %}
+
+{% import "_includes/forms" as forms %}
+
+{# {% set selectedTab = "forms" %} #}
+
+{% block content %}
+
+<h1>Add a Form</h1>
+
+<form method="post" accept-charset="UTF-8" data-saveshortcut="1">
+	<input type="hidden" name="action" value="simpleForm/saveForm">
+	<input type="hidden" name="redirect" value="simpleForm/">
+	{% if form is defined and form.id is defined %}
+	<input type="hidden" name="formId" value="{{ form.id }}">
+	{% endif %}
+
+	{{ forms.textField({
+		first: 			true,
+		label: 			"Name"|t,
+		id: 			"name",
+		name: 			"name",
+		instructions: 	"Give your form a name",
+		value: 			form.name|default(''),
+		autofocus: 		true,
+		errors: 		form.getErrors('name'),
+		required: 		true,
+		translatable: 	true
+	}) }}
+
+	{{ forms.textField({
+		label: 			"Handle"|t,
+		id: 			"handle",
+		name: 			"handle",
+		class: 			"code",
+		instructions: 	"The form's handle. What you'll use to refer to it in templates.",
+		value: 			form.handle|default(''),
+		errors: 		form.getErrors('handle'),
+		required: 		true
+	}) }}
+
+	{{ forms.textField({
+		label: 			"Description"|t,
+		id: 			"description",
+		name: 			"description",
+		instructions: 	"Give your form a description.",
+		value: 			form.description|default(''),
+		errors: 		form.getErrors('description'),
+		required: 		true
+	}) }}
+
+	<hr>
+
+	<div class="button">
+		<input type="submit" class="btn submit" value="{{ 'Save'|t }}">
+	</div>
+
+</form>
+
+{% endblock %}
+
+
+{% block sidebar %}
+	{{ parent() }}
+{% endblock %}
