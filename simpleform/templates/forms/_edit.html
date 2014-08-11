@@ -10,7 +10,7 @@
 
 <form method="post" accept-charset="UTF-8" data-saveshortcut="1">
 	<input type="hidden" name="action" value="simpleForm/saveForm">
-	<input type="hidden" name="redirect" value="simpleForm/">
+	<input type="hidden" name="redirect" value="simpleform/">
 	{% if form is defined and form.id is defined %}
 	<input type="hidden" name="formId" value="{{ form.id }}">
 	{% endif %}
@@ -47,6 +47,56 @@
 		value: 			form.description|default(''),
 		errors: 		form.getErrors('description'),
 		required: 		true
+	}) }}
+
+	{{ forms.textField({
+		label: 			"Email Notification Subject"|t,
+		id: 			"emailSubject",
+		name: 			"emailSubject",
+		instructions: 	"This is the subject of the email notification. Note: The form name and submission ID will be appended.",
+		value: 			form.emailSubject,
+		errors: 		form.getErrors('emailSubject'),
+		required: 		true,
+	}) }}
+
+	{{ forms.textField({
+		label: 			"From Email Address of Notication"|t,
+		id: 			"fromEmail",
+		name: 			"fromEmail",
+		instructions: 	"",
+		value: 			form.fromEmail,
+		errors: 		form.getErrors('fromEmail'),
+		required: 		true,
+	}) }}
+
+	{{ forms.textField({
+		label: 			"Reply-To Email Address of Notification"|t,
+		id: 			"replyToEmail",
+		name: 			"replyToEmail",
+		instructions: 	"",
+		value: 			form.replyToEmail,
+		errors: 		form.getErrors('replyToEmail'),
+		required: 		true,
+	}) }}
+
+	{{ forms.textField({
+		label: 			"Send Email Notifications To"|t,
+		id: 			"toEmail",
+		name: 			"toEmail",
+		instructions: 	"To send the notification to more than one email address, separate with a comma(,)",
+		value: 			form.toEmail,
+		errors: 		form.getErrors('toEmail'),
+		required: 		true,
+	}) }}
+
+	{{ forms.textField({
+		label: 			"Template Path to Notification Email"|t,
+		id: 			"notificationTemplatePath",
+		name: 			"notificationTemplatePath",
+		instructions: 	"Set the relative path to the Twig template you would like to use for your notification email.",
+		value: 			form.notificationTemplatePath,
+		errors: 		form.getErrors('notificationTemplatePath'),
+		required: 		false,
 	}) }}
 
 	<hr>

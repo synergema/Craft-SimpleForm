@@ -1,0 +1,18 @@
+{% extends "_layouts/cp" %}
+
+{% set title = "Form Submission Details" %}
+
+{% set content %}
+
+	<table class="data fullwidth collapsible">
+
+		{% for name, value in data %}
+		<tr>
+			<td><strong>{{ name }}</strong></td>
+			<td>{{ value }}</td>
+		</tr>
+		{% endfor %}
+
+	</table>
+
+{% endset %}

@@ -11,9 +11,14 @@ class SimpleForm_FormRecord extends BaseRecord
 	public function defineAttributes()
 	{
 		return array(
-			'name'        => AttributeType::String,
-			'handle'      => AttributeType::Handle,
-			'description' => AttributeType::String,
+			'name'                     => AttributeType::String,
+			'handle'                   => AttributeType::Handle,
+			'description'              => AttributeType::String,
+			'emailSubject'             => AttributeType::String,
+			'fromEmail'                => AttributeType::Mixed,
+			'replyToEmail'             => AttributeType::Email,
+			'toEmail'                  => AttributeType::Mixed,
+			'notificationTemplatePath' => AttributeType::String,
 		);
 	}
 
