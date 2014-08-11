@@ -6,6 +6,10 @@
 
 {% set content %}
 	<h1>SimpleForm</h1>
+
+	{% for form in forms %}
+	<p>{{ form.name }}</p>
+	{% endfor %}
 {% endset %}
 
 {% block sidebar %}

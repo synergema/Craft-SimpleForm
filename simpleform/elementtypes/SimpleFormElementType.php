@@ -16,13 +16,13 @@ class SimpleFormElementType extends BaseElementType
 			),
 		);
 
-		foreach (craft()->simpleform->getAllForms() as $form )
+		foreach (craft()->simpleForm->getAllForms() as $form)
 		{
 			$key = 'formId:' . $form->id;
 
 			$sources[$key] = array(
 				'label'    => $form->name,
-				'criteria' => array('form' => $form->id)
+				'criteria' => array('formId' => $form->id)
 			);
 		}
 
@@ -38,6 +38,7 @@ class SimpleFormElementType extends BaseElementType
 	{
 		return array(
 			'id'          => Craft::t('ID'),
+			'formId'      => Craft::t('Form ID'),
 			'dateCreated' => Craft::t('Date'),
 			'data'        => Craft::t('Submission Data'),
 		);
@@ -52,12 +53,14 @@ class SimpleFormElementType extends BaseElementType
 	 */
 	public function getTableAttributeHtml(BaseElementModel $element, $attribute)
 	{
-		return '';
+		return parent::getTableAttributeHtml($element, $attribute);
 	}
 
 	public function defineCriteriaAttributes()
 	{
-		return array();
+		return array(
+			'order'       => array(AttributeType::String, 'default' => 'simpleform_entries.dateCreated desc'),
+		);
 	}
 
 	/**
@@ -70,25 +73,9 @@ class SimpleFormElementType extends BaseElementType
 	public function modifyElementsQuery(DbCommand $query, ElementCriteriaModel $criteria)
 	{
 		$query
-			->addSelect('simpleforms_entries.formId, simpleforms_entries.data')
-			->join('simpleform simpleforms_entries', 'simpleforms_entries.id = elements.id');
-
-		// if ($criteria->firstName) {
-		// 	$query->andWhere(DbHelper::parseParam('landingpages.firstName', $criteria->firstName, $query->params));
-		// }
-
-		// if ($criteria->lastName) {
-		// 	$query->andWhere(DbHelper::parseParam('landingpages.lastName', $criteria->lastName, $query->params));
-		// }
-
-		// if ($criteria->email) {
-		// 	$query->andWhere(DbHelper::parseParam('landingpages.email', $criteria->email, $query->params));
-		// }
-
-		// if ($criteria->landingPage) {
-		// 	$query->andWhere(DbHelper::parseParam('landingpages.landingPage', $criteria->landingPage, $query->params));
-		// }
-
+			->addSelect('simpleform_entries.formId, simpleform_entries.data')
+			->join('simpleform_entries simpleform_entries', 'simpleform_entries.id = elements.id'
+		);
 	}
 
 	/**

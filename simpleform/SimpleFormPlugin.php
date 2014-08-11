@@ -53,9 +53,9 @@ class SimpleFormPlugin extends BasePlugin
 	public function registerCpRoutes()
 	{
 		return array(
-			'simpleform'                  => array('action' => 'simpleForm/index'),
-			'simpleform/forms/new'        => array('action' => 'simpleForm/newForm'),
-			'simpleform/(?P<entryId>\d+)' => array('action' => 'simpleForm/viewEntry'),
+			'simpleform'                          => array('action' => 'simpleForm/index'),
+			'simpleform/forms/new'                => array('action' => 'simpleForm/newForm'),
+			'simpleform/entries/(?P<entryId>\d+)' => array('action' => 'simpleForm/viewEntry'),
 		);
 	}
 }
