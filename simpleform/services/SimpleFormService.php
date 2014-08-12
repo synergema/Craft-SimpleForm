@@ -5,7 +5,7 @@ class SimpleFormService extends BaseApplicationComponent
 {
 	public function getAllEntries()
 	{
-		$entries = SimpleForm_EntriesRecord::model()->findAll();
+		$entries = SimpleForm_EntryRecord::model()->findAll();
 
 		return $entries;
 	}
@@ -67,6 +67,7 @@ class SimpleFormService extends BaseApplicationComponent
 		$formRecord->name                     = $form->name;
 		$formRecord->handle                   = $form->handle;
 		$formRecord->description              = $form->description;
+		$formRecord->successMessage           = $form->successMessage;
 		$formRecord->emailSubject             = $form->emailSubject;
 		$formRecord->fromEmail                = $form->fromEmail;
 		$formRecord->replyToEmail             = $form->replyToEmail;
@@ -116,6 +117,45 @@ class SimpleFormService extends BaseApplicationComponent
 	public function getFormEntryById($id)
 	{
 		return craft()->elements->getElementById($id, 'SimpleForm');
+	}
+
+	public function deleteFormById($formId)
+	{
+		if (!$formId)
+		{
+			return false;
+		}
+
+		$transaction = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
+		try
+		{
+			// Grab the entry ids so we can clean the elements table.
+			$entryIds = craft()->db->createCommand()
+				->select('id')
+				->from('simpleform_entries')
+				->where(array('formId' => $formId))
+				->queryColumn();
+
+			craft()->elements->deleteElementById($entryIds);
+
+			$affectedRows = craft()->db->createCommand()->delete('simpleform_forms', array('id' => $formId));
+
+			if ($transaction !== null)
+			{
+				$transaction->commit();
+			}
+
+			return (bool) $affectedRows;
+		}
+		catch (\Exception $e)
+		{
+			if ($transaction !== null)
+			{
+				$transaction->rollback();
+			}
+
+			throw $e;
+		}
 	}
 
 	/**

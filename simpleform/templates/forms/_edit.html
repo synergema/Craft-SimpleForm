@@ -2,11 +2,11 @@
 
 {% import "_includes/forms" as forms %}
 
-{# {% set selectedTab = "forms" %} #}
+{% set selectedTab = "forms" %}
 
 {% block content %}
 
-<h1>Add a Form</h1>
+<h1>Add New Form</h1>
 
 <form method="post" accept-charset="UTF-8" data-saveshortcut="1">
 	<input type="hidden" name="action" value="simpleForm/saveForm">
@@ -47,6 +47,17 @@
 		value: 			form.description|default(''),
 		errors: 		form.getErrors('description'),
 		required: 		true
+	}) }}
+
+	{{ forms.textareaField({
+		label: 			"Success Message"|t,
+		id:				"successMessage",
+		name:			"successMessage",
+		class:			"simpleFormRedactor",
+		instructions:	"Enter a message returned on a successful submission.",
+		value:			form.successMessage|default(''),
+		errors:			form.getErrors('successMessage'),
+		required:		true
 	}) }}
 
 	{{ forms.textField({
@@ -113,3 +124,16 @@
 {% block sidebar %}
 	{{ parent() }}
 {% endblock %}
+
+{% includeCssResource "lib/redactor/redactor.css" %}
+{% includeJsResource "lib/redactor/redactor.js" %}
+{% set js %}
+(function() {
+	$('.simpleFormRedactor').redactor({
+		buttons: ['html','formatting','bold','italic','unorderedlist','orderedlist','link','image','video'],
+		plugins: ['fullscreen'],
+		toolbarFixedBox: true
+	});
+})();
+{% endset %}
+{% includeJs js %}

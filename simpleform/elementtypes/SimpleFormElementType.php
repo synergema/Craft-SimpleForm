@@ -12,7 +12,7 @@ class SimpleFormElementType extends BaseElementType
 	{
 		$sources = array(
 			'*' => array(
-				'label' => Craft::t('All SimpleForm submissons.'),
+				'label' => Craft::t('All Submissons'),
 			),
 		);
 
@@ -38,7 +38,8 @@ class SimpleFormElementType extends BaseElementType
 	{
 		return array(
 			'id'          => Craft::t('ID'),
-			'formId'      => Craft::t('Form ID'),
+			// 'formId'   => Craft::t('Form ID'),
+			'title'       => Craft::t('Title'),
 			'dateCreated' => Craft::t('Date'),
 			'data'        => Craft::t('Submission Data'),
 		);
@@ -53,7 +54,16 @@ class SimpleFormElementType extends BaseElementType
 	 */
 	public function getTableAttributeHtml(BaseElementModel $element, $attribute)
 	{
-		return parent::getTableAttributeHtml($element, $attribute);
+		switch ($attribute)
+		{
+			case 'data':
+				$data = $element->_normalizeDataForElementsTable();
+				return $element->data;
+				break;
+			default:
+				return parent::getTableAttributeHtml($element, $attribute);
+				break;
+		}
 	}
 
 	public function defineCriteriaAttributes()
@@ -84,9 +94,16 @@ class SimpleFormElementType extends BaseElementType
 	 * @param array $row
 	 * @return array
 	 */
-	public function populateElementModel($row)
+	public function populateElementModel($row, $normalize = false)
 	{
-		return SimpleForm_EntryModel::populateModel($row);
+		$entry = SimpleForm_EntryModel::populateModel($row);
+
+		if ($normalize)
+		{
+			$entry = $entry->_normalizeDataForElementsTable();
+		}
+
+		return $entry;
 	}
 
 }

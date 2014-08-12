@@ -55,6 +55,8 @@ class SimpleFormPlugin extends BasePlugin
 		return array(
 			'simpleform'                          => array('action' => 'simpleForm/index'),
 			'simpleform/forms/new'                => array('action' => 'simpleForm/newForm'),
+			'simpleform/forms/(?P<formId>\d+)'    => array('action' => 'simpleForm/editForm'),
+			'simpleform/entries'                  => array('action' => 'simpleForm/entriesIndex'),
 			'simpleform/entries/(?P<entryId>\d+)' => array('action' => 'simpleForm/viewEntry'),
 		);
 	}

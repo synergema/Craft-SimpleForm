@@ -7,12 +7,41 @@
 {% set content %}
 	<h1>SimpleForm</h1>
 
-	{% for form in forms %}
-	<p>{{ form.name }}</p>
-	{% endfor %}
+	{% if forms|length %}
+		<table id="forms" class="data fullwidth collapsible">
+			<thead>
+				<th scope="col">{{ "Name"|t }}</th>
+				<th scope="col">{{ "Handle"|t }}</th>
+				<th scope="col">{{ "Description"|t }}</th>
+				<td class="thin"></td>
+			</thead>
+			<tbody>
+				{% for form in forms %}
+					<tr data-id="{{ form.id }}" data-name="{{ form.name|t }}">
+						<th scope="row" data-title="{{ 'Name'|t }}"><a href="{{ url('simpleform/forms/' ~ form.id) }}">{{ form.name|t }}</a></th>
+						<td data-title="{{ 'Handle'|t }}"><code>{{ form.handle }}</code></td>
+						<td data-description="{{ "Description"|t }}">{{ form.description }}</td>
+						<td class="thin"><a class="delete icon" title="{{ 'Delete'|t }}" role="button"></a></td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	{% endif %}
+
 {% endset %}
 
 {% block sidebar %}
-	<a href="{{ url('simpleform/forms/new') }}" class="btn submit">Add a new form</a>
+	<a href="{{ url('simpleform/forms/new') }}" class="btn add submit icon">Add New Form</a>
 	{{ parent() }}
 {% endblock %}
+
+{% set js %}
+	var adminTable = new Craft.AdminTable({
+		tableSelector: '#forms',
+		noObjectsSelector: '#noforms',
+		newObjectBtnSelector: '#newformcontainer',
+		deleteAction: 'simpleForm/deleteForm',
+		confirmDeleteMessage: '{{ "Are you sure you want to delete “{name}”?"|t }}'
+	});
+{% endset %}
+{% includeJs js %}

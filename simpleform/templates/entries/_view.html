@@ -1,8 +1,14 @@
 {% extends "_layouts/cp" %}
 
-{% set title = "Form Submission Details" %}
+{# {% set title = "Form Submission Details" %} #}
+
+{% set selectedTab = 'entries' %}
 
 {% set content %}
+
+	{% if title is defined %}
+	<h2>{{ title }}</h2>
+	{% endif %}
 
 	<table class="data fullwidth collapsible">
 

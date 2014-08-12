@@ -4,6 +4,7 @@ namespace Craft;
 class SimpleFormController extends BaseController
 {
 	protected $allowAnonymous = true;
+	protected $defaultEmailTemplate = 'simpleform/email/default';
 
 	/**
 	 * View all entries
@@ -24,9 +25,12 @@ class SimpleFormController extends BaseController
 		return $this->renderTemplate('simpleform/forms/_edit', $variables);
 	}
 
-	public function actionEditForm()
+	public function actionEditForm(array $variables = array())
 	{
+		$variables['form'] = SimpleForm_FormRecord::model()->findById($variables['formId']);
+		$variables['tabs'] = $this->_getTabs();
 
+		return $this->renderTemplate('simpleform/forms/_edit', $variables);
 	}
 
 	public function actionSaveForm()
@@ -35,9 +39,11 @@ class SimpleFormController extends BaseController
 
 		$form = new SimpleForm_FormModel;
 
+		$form->id                       = craft()->request->getPost('formId');
 		$form->name                     = craft()->request->getPost('name');
 		$form->handle                   = craft()->request->getPost('handle');
 		$form->description              = craft()->request->getPost('description');
+		$form->successMessage           = craft()->request->getPost('successMessage');
 		$form->emailSubject             = craft()->request->getPost('emailSubject');
 		$form->fromEmail                = craft()->request->getPost('fromEmail');
 		$form->replyToEmail             = craft()->request->getPost('replyToEmail');
@@ -60,11 +66,22 @@ class SimpleFormController extends BaseController
 		));
 	}
 
+	public function actionDeleteForm()
+	{
+		$this->requirePostRequest();
+		$this->requireAjaxRequest();
+
+		$formId = craft()->request->getRequiredPost('id');
+
+		craft()->simpleForm->deleteFormById($formId);
+		$this->returnJson(array('success' => true));
+	}
+
 	public function actionEntriesIndex()
 	{
-		
 		// Get the data
 		$variables = craft()->simpleForm->getAllEntries();
+		$variables['tabs'] = $this->_getTabs();
 
 		// Render the template!
 		$this->renderTemplate('simpleform/entries/index', $variables);
@@ -74,7 +91,7 @@ class SimpleFormController extends BaseController
 	{
 		$entry              = craft()->simpleForm->getFormEntryById($variables['entryId']);
 		$variables['entry'] = $entry;
-		// die(var_dump($entryRecord));
+		//die(var_dump($entry));
 
 		if (empty($entry))
 		{
@@ -92,8 +109,6 @@ class SimpleFormController extends BaseController
 
 		$errors['required'] = array();
 
-		//die(var_dump(craft()->request->getPost()));
-
 		$simpleFormHandle = craft()->request->getPost('simpleFormHandle');
 
 		// Required attributes
@@ -101,13 +116,13 @@ class SimpleFormController extends BaseController
 
 		if ($required)
 		{
-			foreach ($required as $index => $key)
+			foreach ($required as $key => $message)
 			{
 				$value = craft()->request->getPost($key);
 
 				if ($value == '')
 				{
-					$errors['required'][$key] = "$key is a required field.";
+					$errors['required'][$key] = $message;
 				}
 			}
 		}
@@ -139,6 +154,7 @@ class SimpleFormController extends BaseController
 		// Form data
 		$data = serialize(craft()->request->getPost());
 
+		// New form entry model
 		$simpleFormEntry = new SimpleForm_EntryModel();
 
 		// Set entry attributes
@@ -149,9 +165,19 @@ class SimpleFormController extends BaseController
 		if (craft()->simpleForm->saveFormEntry($simpleFormEntry))
 		{
 			// Time to make the notifications
-			if ($this->_sendEmailNotification($simpleFormEntry, $form)) {
-				$message =  Craft::t('Thank you, we have received your submission and we\'ll be in touch shortly.');
-				craft()->userSession->setFlash('thankYou', $message);
+			if ($this->_sendEmailNotification($simpleFormEntry, $form)) 
+			{
+				// Set the message
+				if (!empty($form->successMessage))
+				{
+					$message = $form->successMessage;
+				}
+				else
+				{
+					$message =  Craft::t('Thank you, we have received your submission and we\'ll be in touch shortly.');
+				}
+
+				craft()->userSession->setFlash('success', $message);
 				$this->redirectToPostedUrl($simpleFormEntry);
 			}
 			else {
@@ -188,11 +214,21 @@ class SimpleFormController extends BaseController
 		}
 
 		// Email template
-		$template = 'simpleform/email/default';
+		if (craft()->templates->findTemplate($form->notificationTemplatePath))
+		{
+			$template = $form->notificationTemplatePath;
+		}
+
+		if (!$template)
+		{
+			$template = $this->defaultEmailTemplate;
+		}
+
 		$variables = array(
 			'data' => $postData,
 			'form' => $form,
 		);
+
 		$message  = craft()->templates->render($template, $variables);
 
 		// Send the message
@@ -239,5 +275,19 @@ class SimpleFormController extends BaseController
 				'url'   => UrlHelper::getUrl('simpleform/entries'),
 			),
 		);
+	}
+
+	public function renderTest()
+	{
+		//$this->requirePostRequest();
+
+		$post = craft()->request->getPost();
+
+		die(var_dump($post));
+		$string = craft()->request->getPost('simpleFormTitle');
+
+		$renderedString = $this->renderString($string, $post);
+
+		//die(var_dump($renderedString));
 	}
 }
