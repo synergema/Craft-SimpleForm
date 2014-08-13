@@ -226,7 +226,7 @@ class SimpleFormService extends BaseApplicationComponent
 		$email->replyTo   = $form->replyToEmail;
 		$email->sender    = $form->fromEmail;
 		$email->fromName  = 'SimpleForm Bot';
-		$email->subject   = "$form->emailSubject - [$form->id]";
+		$email->subject   = $form->emailSubject;
 		$email->htmlBody  = $message;
 
 		// Support for sending multiple emails

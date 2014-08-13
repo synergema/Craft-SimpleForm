@@ -20,6 +20,7 @@ class SimpleFormController extends BaseController
 
 	public function actionNewForm()
 	{
+		$variables['tabs'] = $this->_getTabs();
 		$variables['form'] = new SimpleForm_FormModel;
 
 		return $this->renderTemplate('simpleform/forms/_edit', $variables);
@@ -208,12 +209,12 @@ class SimpleFormController extends BaseController
 
 		if (craft()->elements->deleteElementById($entryId))
 		{
-			craft()->userSession->setNotice(Craft::t('Event deleted.'));
+			craft()->userSession->setNotice(Craft::t('Entry deleted.'));
 			$this->redirectToPostedUrl();
 		}
 		else
 		{
-			craft()->userSession->setError(Craft::t('Couldn’t delete event.'));
+			craft()->userSession->setError(Craft::t('Couldn’t delete entry.'));
 		}
 
 	}
@@ -245,8 +246,9 @@ class SimpleFormController extends BaseController
 		}
 
 		$variables = array(
-			'data' => $postData,
-			'form' => $form,
+			'data'  => $postData,
+			'form'  => $form,
+			'entry' => $record,
 		);
 
 		$message  = craft()->templates->render($template, $variables);

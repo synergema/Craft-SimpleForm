@@ -11,7 +11,7 @@
 	{% endif %}
 
 	<h1>{{ form.name }} - {{ entry.id }}</h1>
-	<h2>Submitted {{ entry.dateCreated | date('F d, Y') }} at {{ dateCreated | date('g:h A') }}</h2>
+	<h2>Submitted {{ entry.dateCreated | date('F d, Y') }} at {{ entry.dateCreated | date('g:h A') }}</h2>
 
 	<table class="data fullwidth collapsible">
 
