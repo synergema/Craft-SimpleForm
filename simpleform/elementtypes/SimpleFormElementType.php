@@ -31,7 +31,7 @@ class SimpleFormElementType extends BaseElementType
 
 	public function defineSearchableAttributes()
 	{
-		return array();
+		return array('id', 'data');
 	}
 
 	public function defineTableAttributes($source = null)
@@ -39,7 +39,7 @@ class SimpleFormElementType extends BaseElementType
 		return array(
 			'id'          => Craft::t('ID'),
 			// 'formId'   => Craft::t('Form ID'),
-			'title'       => Craft::t('Title'),
+			//'title'       => Craft::t('Title'),
 			'dateCreated' => Craft::t('Date'),
 			'data'        => Craft::t('Submission Data'),
 		);
@@ -84,8 +84,8 @@ class SimpleFormElementType extends BaseElementType
 	{
 		$query
 			->addSelect('simpleform_entries.formId, simpleform_entries.data')
-			->join('simpleform_entries simpleform_entries', 'simpleform_entries.id = elements.id'
-		);
+			->join('simpleform_entries simpleform_entries', 'simpleform_entries.id = elements.id')
+		;
 	}
 
 	/**

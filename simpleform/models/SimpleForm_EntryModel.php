@@ -46,15 +46,15 @@ class SimpleForm_EntryModel extends BaseElementModel
 
 		$data = $this->_filterPostKeys($data);
 
-		// Pop off the first (2) items from the data array
-		$data = array_slice($data, 0, 2);
+		// Pop off the first (4) items from the data array
+		$data = array_slice($data, 0, 5);
 
-		$newData = (string) "";
-
+		$newData = '<ul>';
 		foreach ($data as $key => $value)
 		{
-			$newData .= "<p><strong>{$key}</strong>: {$value}</p>";
+			$newData .= '<li class="left icon text" style="margin-right:10px;"><strong>' . ucfirst($key) . "</strong>: {$value}</li>";
 		}
+		$newData .= "</ul>";
 
 		$this->__set('data', $newData);
 
@@ -75,7 +75,7 @@ class SimpleForm_EntryModel extends BaseElementModel
 		{
 			foreach ($post as $k => $v)
 			{
-				if (in_array(strtolower($k), $filterKeys))
+				if (in_array(strtolower($k), $filterKeys) || empty($v))
 				{
 					unset($post[$k]);
 				}

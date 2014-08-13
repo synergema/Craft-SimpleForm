@@ -10,15 +10,29 @@
 	<h2>{{ title }}</h2>
 	{% endif %}
 
+	<h1>{{ form.name }} - {{ entry.id }}</h1>
+	<h2>Submitted {{ entry.dateCreated | date('F d, Y') }} at {{ dateCreated | date('g:h A') }}</h2>
+
 	<table class="data fullwidth collapsible">
 
 		{% for name, value in data %}
 		<tr>
-			<td><strong>{{ name }}</strong></td>
+			<td><strong>{{ name | ucfirst() }}</strong></td>
 			<td>{{ value }}</td>
 		</tr>
 		{% endfor %}
 
 	</table>
+
+	<hr>
+
+	<form method="post" accept-charset="utf-8">
+		<input type="hidden" name="action" value="simpleForm/deleteEntry">
+		<input type="hidden" name="redirect" value="simpleform/entries">
+		<input type="hidden" name="entryId" value="{{ entry.id }}">
+		<button class="btn delete submit">
+			Delete Entry
+		</button>
+	</form>
 
 {% endset %}

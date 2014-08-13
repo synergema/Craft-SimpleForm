@@ -55,7 +55,7 @@
 		name:			"successMessage",
 		class:			"simpleFormRedactor",
 		instructions:	"Enter a message returned on a successful submission.",
-		value:			form.successMessage|default(''),
+		value:			(form.successMessage is defined) ? form.successMessage : '',
 		errors:			form.getErrors('successMessage'),
 		required:		true
 	}) }}
@@ -131,7 +131,7 @@
 (function() {
 	$('.simpleFormRedactor').redactor({
 		buttons: ['html','formatting','bold','italic','unorderedlist','orderedlist','link','image','video'],
-		plugins: ['fullscreen'],
+		{# plugins: ['fullscreen'], #}
 		toolbarFixedBox: true
 	});
 })();

@@ -91,14 +91,16 @@ class SimpleFormController extends BaseController
 	{
 		$entry              = craft()->simpleForm->getFormEntryById($variables['entryId']);
 		$variables['entry'] = $entry;
-		//die(var_dump($entry));
 
 		if (empty($entry))
 		{
 			throw new HttpException(404);
 		}
 
-		$variables['data'] = $this->_filterPostKeys(unserialize($entry->data));
+		$variables['form']        = craft()->simpleForm->getFormById($entry->formId);
+		$variables['tabs']        = $this->_getTabs();
+		$variables['selectedTab'] = 'entries';
+		$variables['data']        = $this->_filterPostKeys(unserialize($entry->data));
 
 		$this->renderTemplate('simpleform/entries/_view', $variables);
 	}
@@ -120,7 +122,7 @@ class SimpleFormController extends BaseController
 			{
 				$value = craft()->request->getPost($key);
 
-				if ($value == '')
+				if (empty($value))
 				{
 					$errors['required'][$key] = $message;
 				}
@@ -196,6 +198,24 @@ class SimpleFormController extends BaseController
 		craft()->urlManager->setRouteVariables(array(
 			'entry' => $simpleFormEntry
 		));
+	}
+
+	public function actionDeleteEntry()
+	{
+		$this->requirePostRequest();
+
+		$entryId = craft()->request->getRequiredPost('entryId');
+
+		if (craft()->elements->deleteElementById($entryId))
+		{
+			craft()->userSession->setNotice(Craft::t('Event deleted.'));
+			$this->redirectToPostedUrl();
+		}
+		else
+		{
+			craft()->userSession->setError(Craft::t('Couldn’t delete event.'));
+		}
+
 	}
 
 	protected function _sendEmailNotification($record, $form)
