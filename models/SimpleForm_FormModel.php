@@ -18,6 +18,7 @@ class SimpleForm_FormModel extends BaseModel
 			'successMessage'           => AttributeType::Mixed,
 			'emailSubject'             => AttributeType::String,
 			'fromEmail'                => AttributeType::Mixed,
+			'fromName'                 => AttributeType::String,
 			'replyToEmail'             => AttributeType::Email,
 			'toEmail'                  => AttributeType::Mixed,
 			'notificationTemplatePath' => AttributeType::String,

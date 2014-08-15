@@ -70,6 +70,7 @@ class SimpleFormService extends BaseApplicationComponent
 		$formRecord->successMessage           = $form->successMessage;
 		$formRecord->emailSubject             = $form->emailSubject;
 		$formRecord->fromEmail                = $form->fromEmail;
+		$formRecord->fromName                 = $form->fromName;
 		$formRecord->replyToEmail             = $form->replyToEmail;
 		$formRecord->toEmail                  = $form->toEmail;
 		$formRecord->notificationTemplatePath = $form->notificationTemplatePath;

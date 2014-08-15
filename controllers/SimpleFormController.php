@@ -47,6 +47,7 @@ class SimpleFormController extends BaseController
 		$form->successMessage           = craft()->request->getPost('successMessage');
 		$form->emailSubject             = craft()->request->getPost('emailSubject');
 		$form->fromEmail                = craft()->request->getPost('fromEmail');
+		$form->fromName                 = craft()->request->getPost('fromName');
 		$form->replyToEmail             = craft()->request->getPost('replyToEmail');
 		$form->toEmail                  = craft()->request->getPost('toEmail');
 		$form->notificationTemplatePath = craft()->request->getPost('notificationTemplatePath');

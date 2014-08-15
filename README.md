@@ -4,7 +4,7 @@ A simple form submission logger and email notifier for [Craft 2](http://buildwit
 
 -----
 
-**Note: This is still alphs. Not for production use! Or for the faint of heart!** 
+**Note: This is still alpha. Not for production use! Or for the faint of heart!** 
 
 -----
 

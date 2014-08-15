@@ -17,6 +17,7 @@ class SimpleForm_FormRecord extends BaseRecord
 			'successMessage'           => AttributeType::Mixed,
 			'emailSubject'             => AttributeType::String,
 			'fromEmail'                => AttributeType::Mixed,
+			'fromName'                 => AttributeType::String,
 			'replyToEmail'             => AttributeType::Email,
 			'toEmail'                  => AttributeType::Mixed,
 			'notificationTemplatePath' => AttributeType::String,
