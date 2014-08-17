@@ -10,17 +10,17 @@ class SimpleFormPlugin extends BasePlugin
 
 	function getVersion()
 	{
-		return '1.0a1';
+		return '1.0a2';
 	}
 
 	function getDeveloper()
 	{
-		return 'Plain Language.';
+		return 'Synergema';
 	}
 
 	function getDeveloperUrl()
 	{
-		return 'http://plainlanguage.co';
+		return 'http://synergema.com';
 	}
 
 	function getSourceLanguage()
