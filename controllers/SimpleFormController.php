@@ -109,11 +109,33 @@ class SimpleFormController extends BaseController
 
 	public function actionSaveFormEntry()
 	{
+		// Require a post request
 		$this->requirePostRequest();
 
+		// Honeypot validation
+		$honeypot = craft()->request->getPost('simpleFormHoneypot');
+
+		if ($honeypot)
+		{
+			$honeypotValue = craft()->request->getPost($honeypot);
+
+			if( !empty($honeypotValue))
+			{
+				craft()->userSession->setFlash('honeypot', 'yup');
+				$this->redirect(craft()->request->getUrl());
+			}
+		}
+
+		// Set the required errors array
 		$errors['required'] = array();
 
+		// Get the form
 		$simpleFormHandle = craft()->request->getPost('simpleFormHandle');
+
+		if (!$simpleFormHandle)
+		{
+			throw new HttpException(404);
+		}
 
 		// Required attributes
 		$required = craft()->request->getPost('required');
@@ -182,7 +204,7 @@ class SimpleFormController extends BaseController
 				}
 
 				craft()->userSession->setFlash('success', $message);
-				$this->redirectToPostedUrl($simpleFormEntry);
+				$this->redirectToPostedUrl();
 			}
 			else {
 				craft()->userSession->setError(Craft::t('We\'re sorry, but something has gone wrong.'));
@@ -265,12 +287,18 @@ class SimpleFormController extends BaseController
 	protected function _filterPostKeys($post)
 	{
 		$filterKeys = array(
-			'required',
 			'action',
-			'simpleformhandle',
+			'required',
 			'redirect',
-			'honeypot',
+			'simpleFormhandle',
+			'simpleFormHoneypot',
 		);
+
+		if (isset($post['simpleFormHoneypot']))
+		{
+			$honeypot = $post['simpleFormHoneypot'];
+			array_push($filterKeys, $honeypot);
+		}
 
 		if (is_array($post))
 		{

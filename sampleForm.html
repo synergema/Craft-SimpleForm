@@ -3,8 +3,8 @@
 
 	This template assumes several things:
 
-	1. A layout to extend called "_layout" in the root of your templates folder.
-	2. Copying Craft app's forms macros into your templates directory.
+	1. A layout to extend called "_layout" in the root of your templates folder. This can obviously be changed to whatever you would lke.
+	2. Copying Craft app's forms macros into your templates directory. This includes `forms.html` and the `forms` directory.
 	3. That you have created a SimpleForm form with a handle of `contactForm`.
 #}
 
@@ -24,12 +24,14 @@
 	<form method="post" accept-charset="utf-8">
 
 		{% if craft.session.hasFlash('error') %}
-
 			{# Error handling #}
 			{% for error in craft.session.getFlash('error').required %}
 			<p class="error">{{ error }}</p>
 			{% endfor %}
+		{% endif %}
 
+		{% if craft.session.hasFlash('post') %}
+			{% set form = craft.session.getFlash('post') %}
 		{% endif %}
 
 		<input type="hidden" name="action" value="simpleForm/saveFormEntry">
@@ -44,7 +46,6 @@
 			name:		"name",
 			id:			"name",
 			value:		form.name is defined ? form.name : '',
-			errors:		form is defined ? form.getErrors('name'),
 		})	}}
 
 		{# Company #}
@@ -53,7 +54,6 @@
 			name:		"company",
 			id:			"company",
 			value:		form.company is defined ? form.company : '',
-			errors:		form is defined ? form.getErrors('company'),
 		})	}}
 
 		{# Address #}
@@ -62,7 +62,6 @@
 			name:		"address",
 			id:			"address",
 			value:		form.address is defined ? form.address : '',
-			errors:		form is defined ? form.getErrors('address'),
 		})	}}
 
 		{# City #}
@@ -71,7 +70,6 @@
 			name:		"city",
 			id:			"city",
 			value:		form.city is defined ? form.city : '',
-			errors:		form is defined ? form.getErrors('city'),
 		})	}}
 
 		{# State select #}
@@ -82,7 +80,6 @@
 			name:		"zipCode",
 			id:			"zipCode",
 			value:		form.zipCode is defined ? form.zipCode : '',
-			errors:		form is defined ? form.getErrors('zipCode'),
 		})	}}
 
 		{# Email Address #}
@@ -91,7 +88,6 @@
 			name:		"emailAddress",
 			id:			"emailAddress",
 			value:		form.emailAddress is defined ? form.emailAddress : '',
-			errors:		form is defined ? form.getErrors('emailAddress'),
 		})	}}
 
 		{# Phone #}
@@ -109,7 +105,6 @@
 			name:		"fax",
 			id:			"fax",
 			value:		form.fax is defined ? form.fax : '',
-			errors:		form is defined ? form.getErrors('fax'),
 		})	}}
 
 		{# Message #}
@@ -119,7 +114,6 @@
 			id:			"message",
 			rows:		4,
 			value:		form.message is defined ? form.message : '',
-			errors:		form is defined ? form.getErrors('message'),
 		})	}}
 
 		<button type="submit">
