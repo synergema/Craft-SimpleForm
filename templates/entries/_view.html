@@ -18,7 +18,7 @@
 		{% for name, value in data %}
 		<tr>
 			<td><strong>{{ name | ucfirst() }}</strong></td>
-			<td>{{ value }}</td>
+			<td>{{ value | markdown }}</td>
 		</tr>
 		{% endfor %}
 
@@ -30,9 +30,7 @@
 		<input type="hidden" name="action" value="simpleForm/deleteEntry">
 		<input type="hidden" name="redirect" value="simpleform/entries">
 		<input type="hidden" name="entryId" value="{{ entry.id }}">
-		<button class="btn delete submit">
-			Delete Entry
-		</button>
+		<button class="btn delete submit">Delete Entry</button>
 	</form>
 
 {% endset %}
