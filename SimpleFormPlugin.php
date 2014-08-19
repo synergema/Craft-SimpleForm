@@ -10,7 +10,7 @@ class SimpleFormPlugin extends BasePlugin
 
 	function getVersion()
 	{
-		return '1.0a2.1';
+		return '1.0a2.2';
 	}
 
 	function getDeveloper()

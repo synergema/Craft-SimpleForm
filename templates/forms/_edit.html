@@ -70,7 +70,17 @@
 	}) }}
 
 	{{ forms.textField({
-		label: 			"From Email Address of Notication"|t,
+		label: 			"From Name of Notification"|t,
+		id: 			"fromName",
+		name: 			"fromName",
+		instructions: 	"",
+		value: 			form.fromName,
+		errors: 		form.getErrors('fromName'),
+		required: 		true,
+	}) }}
+
+	{{ forms.textField({
+		label: 			"From Email Address of Notification"|t,
 		id: 			"fromEmail",
 		name: 			"fromEmail",
 		instructions: 	"",
