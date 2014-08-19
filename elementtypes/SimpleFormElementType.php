@@ -69,7 +69,8 @@ class SimpleFormElementType extends BaseElementType
 	public function defineCriteriaAttributes()
 	{
 		return array(
-			'order'       => array(AttributeType::String, 'default' => 'simpleform_entries.dateCreated desc'),
+			'formId' => AttributeType::Mixed,
+			'order'  => array(AttributeType::String, 'default' => 'simpleform_entries.dateCreated desc'),
 		);
 	}
 
@@ -86,6 +87,10 @@ class SimpleFormElementType extends BaseElementType
 			->addSelect('simpleform_entries.formId, simpleform_entries.data')
 			->join('simpleform_entries simpleform_entries', 'simpleform_entries.id = elements.id')
 		;
+
+		if ($criteria->formId) {
+			$query->andWhere(DbHelper::parseParam('simpleform_entries.formId', $criteria->formId, $query->params));
+		}
 	}
 
 	/**
