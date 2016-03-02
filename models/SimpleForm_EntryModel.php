@@ -1,6 +1,8 @@
 <?php
 namespace Craft;
 
+use Guzzle\Inflection\Inflector;
+
 class SimpleForm_EntryModel extends BaseElementModel
 {
 	protected $elementType = 'SimpleForm';

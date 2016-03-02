@@ -147,7 +147,16 @@ class SimpleFormController extends BaseController
             craft()->userSession->setError($errors);
             craft()->userSession->setFlash('post', craft()->request->getPost());
 
-            $this->redirect(craft()->request->getUrl());
+            if (craft()->request->isAjaxRequest()) {
+                $return = array(
+                    'success' => false,
+                    'errors'  => $errors
+                );
+
+                $this->returnJson($return);
+            } else {
+                $this->redirect(craft()->request->getUrl());
+            }
         }
 
         if (!$simpleFormHandle) {
@@ -175,7 +184,7 @@ class SimpleFormController extends BaseController
         $simpleFormEntry->data   = $data;
 
         // Save it
-        if (craft()->simpleForm->saveFormEntry($simpleFormEntry)) {
+        if ($id = craft()->simpleForm->saveFormEntry($simpleFormEntry)) {
             // Time to make the notifications
             if ($this->_sendEmailNotification($simpleFormEntry, $form)) {
                 // Set the message
@@ -186,13 +195,32 @@ class SimpleFormController extends BaseController
                 }
 
                 craft()->userSession->setFlash('success', $message);
-                $this->redirectToPostedUrl();
+
+                if (craft()->request->isAjaxRequest()) {
+                    $return = array(
+                        'success' => true,
+                        'id'      => $id,
+                        'message' => $form->successMessage,
+                    );
+                    $this->returnJson($return);
+                } else {
+                    $this->redirectToPostedUrl();
+                }
             } else {
                 craft()->userSession->setError(Craft::t('We\'re sorry, but something has gone wrong.'));
             }
 
             craft()->userSession->setNotice(Craft::t('Entry saved.'));
-            $this->redirectToPostedUrl($simpleFormEntry);
+
+            if (craft()->request->isAjaxRequest()) {
+                $return = array(
+                    'success' => true,
+                    'id'      => $id,
+                );
+                $this->returnJson($return);
+            } else {
+                $this->redirectToPostedUrl($simpleFormEntry);
+            }
         } else {
             craft()->userSession->setNotice(Craft::t("Couldn't save the form."));
         }
@@ -201,8 +229,9 @@ class SimpleFormController extends BaseController
          * Handle AJAX requests.
          */
         if (craft()->request->isAjaxRequest()) {
-            $return            = array();
-            $return['success'] = true;
+            $return = array(
+                'success' => false,
+            );
 
             $this->returnJson($return);
         } else {
